@@ -10,7 +10,7 @@ def deriveKey(passphrase: str, salt: bytes = None) -> [str, bytes]:
         salt = os.urandom(8)
     return hashlib.pbkdf2_hmac("sha256", passphrase.encode("utf8"), salt, 100000), salt
 
-
+#Encryption
 def encrypt(passphrase: str, plaintext: str) -> str:
     key, salt = deriveKey(passphrase)
     aes = AESGCM(key)
@@ -20,6 +20,7 @@ def encrypt(passphrase: str, plaintext: str) -> str:
     return "%s-%s-%s" % (
     hexlify(salt).decode("utf8"), hexlify(iv).decode("utf8"), hexlify(ciphertext).decode("utf8"))
 
+#Decryption
 def decrypt(passphrase: str, ciphertext: str) -> str:
     salt, iv, ciphertext = map(unhexlify, ciphertext.split("-"))
     key, _ = deriveKey(passphrase, salt)
