@@ -1,5 +1,32 @@
+import sqlite3
+import pathlib
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+s = None
+accounts = pathlib.Path("Accounts.db")
+user = pathlib.Path("User.db")
+lam = [[user, 0], [accounts, 1]]
+for file in lam:
+    print(file[0])
+    if file[0].exists():
+        print("File exist")
+    elif file[1] == 0:
+        print("check")
+        print("Creating User.db")
+        conn = sqlite3.connect('User.db')
+        c = conn.cursor()
+        c.execute("""CREATE TABLE security(ID INTEGER PRIMARY KEY,User string NOT NULL,Hash string NOT NULL,Topt string)""")
+        conn.commit()
+        conn.close()
+    else:
+        print("Creating Accounts.db")
+        conn = sqlite3.connect('Accounts.db')
+        c = conn.cursor()
+        c.execute(
+            """CREATE TABLE accounts(ID INTEGER PRIMARY KEY,Account string NOT NULL,User string NOT NULL,Hash string 
+            NOT NULL,Date string NOT NULL,security_ID INTEGER)""")
+        conn.commit()
+        conn.close()
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
